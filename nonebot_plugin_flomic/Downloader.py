@@ -1,7 +1,6 @@
 import jmcomic
 
 from nonebot.log import logger
-from pathlib import Path
 
 
 class Downloader:

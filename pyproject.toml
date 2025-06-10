@@ -3,14 +3,14 @@ name = "nonebot-plugin-flomic"
 version = "0.1.0"
 description = "nonebot-plugin-flomic"
 readme = "README.md"
-requires-python = ">=3.9, <4.0"
+requires-python = ">=3.9, <=3.11"
 
 [tool.nonebot]
 adapters = [
     { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" }
 ]
-plugins = []
-plugin_dirs = ["nonebot_plugin_flomic/plugins"]
+plugins = ["nonebot_plugin_flomic"]
+plugin_dirs = []
 builtin_plugins = []
 
 [tool.poetry]

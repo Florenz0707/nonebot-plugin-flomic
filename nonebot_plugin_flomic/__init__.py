@@ -1,15 +1,22 @@
 # ------------------------ import ------------------------
 # import packages from python
+import jmcomic
+import os
 from random import *
+from pathlib import Path
 
 # import packages from nonebot or other plugins
+from nonebot import require
 import nonebot.adapters.onebot.v11.exception
 from nonebot.permission import Permission, SUPERUSER, SuperUser, Event
+from nonebot.adapters.onebot.v11 import Bot
+from nonebot.log import logger
 
-# import modules
-from .GroupFileManager import *
-from .MainManager import *
+# import fellow modules
+from .Config import jm_config
 from .utils import *
+from .GroupFileManager import GroupFileManager
+from .MainManager import FileType, Status, MainManager
 
 require("nonebot_plugin_alconna")
 from nonebot_plugin_alconna import *
@@ -17,7 +24,84 @@ from nonebot_plugin_alconna import *
 require("nonebot_plugin_uninfo")
 from nonebot_plugin_uninfo import *
 
+require("nonebot_plugin_localstore")
+import nonebot_plugin_localstore as localstore
+
 # ------------------------ import ------------------------
+
+data_dir: Path = localstore.get_plugin_data_dir()
+database_file: Path = localstore.get_plugin_data_file("jmcomic.db")
+cache_dir: Path = localstore.get_plugin_cache_dir()
+album_cache_dir: Path = Path.joinpath(cache_dir, "album_cache")
+save_cache_dir: Path = Path.joinpath(cache_dir, "save_cache")
+pdf_dir: Path = Path.joinpath(save_cache_dir, "pdf")
+pics_dir: Path = Path.joinpath(save_cache_dir, "pics")
+
+config_dir_list = [album_cache_dir, save_cache_dir, pdf_dir, pics_dir]
+
+for config_dir in config_dir_list:
+    if not os.path.exists(config_dir):
+        os.mkdir(config_dir)
+
+default_options_str = f"""
+client:
+  impl: api
+  retry_times: 10
+dir_rule:
+  base_dir: {album_cache_dir}
+  rule: Bd_Aid_Pindex
+download:
+  threading:
+    image: {jm_config.threading_image}
+    photo: {jm_config.threading_photo}
+log: true
+plugins:
+  after_init:
+  - plugin: log_topic_filter
+    kwargs:
+      whitelist:
+      - album.before
+      - photo.before
+  - plugin: login
+    kwargs:
+      username: {jm_config.jm_username}
+      password: {jm_config.jm_password}
+  after_photo:
+  - plugin: img2pdf
+    kwargs:
+      filename_rule: Aid
+      pdf_dir: {pdf_dir}
+"""
+
+firstImage_options_str = f"""
+client:
+  impl: api
+  retry_times: 5
+dir_rule:
+  base_dir: {album_cache_dir}
+  rule: Bd_Pid
+download:
+  image:
+    suffix: .jpg
+  threading:
+    image: {jm_config.threading_image}
+    photo: {jm_config.threading_photo}
+log: true
+plugins:
+  after_init:
+  - plugin: log_topic_filter
+    kwargs:
+      whitelist:
+      - album.before
+      - photo.before
+  - plugin: login
+    kwargs:
+      username: {jm_config.jm_username}
+      password: {jm_config.jm_password}
+"""
+
+mm = MainManager(database_file, album_cache_dir, save_cache_dir, pdf_dir, pics_dir,
+                 default_options_str, firstImage_options_str)
 
 help_menu = on_alconna(
     "jm.help",
@@ -65,7 +149,6 @@ remoteControl = on_alconna(
     Alconna(
         "jm.m",
         Subcommand("cache"),
-        Subcommand("proxy"),
         Subcommand("f_s"),
         Subcommand("d_s"),
         Subcommand("d_c"),
@@ -101,7 +184,6 @@ remoteControl = on_alconna(
 )
 
 remoteControl_cache = remoteControl.dispatch("cache")
-remoteControl_proxy = remoteControl.dispatch("proxy")
 remoteControl_fs = remoteControl.dispatch("f_s")
 remoteControl_ds = remoteControl.dispatch("d_s")
 remoteControl_dc = remoteControl.dispatch("d_c")
@@ -139,7 +221,7 @@ async def help_menu_handler():
 2> .jm.q <id> [-i] 查询车牌为id的本子信息，使用-i参数取消附带首图
 3> .jm.r [-q] 随机生成可用的车牌号，使用-q参数可以直接查询
 4> .jm.xp [-u QQ] [-l 长度] 查询指定用户的XP，默认查询自己，默认长度为5，最大为20
-?> .jm.m <cache/proxy/f_s/(d/u)_(s/c)/(r/l)_(s/i/d)>"""
+?> .jm.m <cache/f_s/(d/u)_(s/c)/(r/l)_(s/i/d)>"""
     await UniMessage.text(message).finish(at_sender=True)
 
 
@@ -321,13 +403,6 @@ async def remoteControl_cache_handler():
     await UniMessage.text(message).finish()
 
 
-@remoteControl_proxy.handle()
-async def remoteControl_proxy_handler():
-    mm.switchProxy()
-    proxy = "开启" if mm.getProxy() else "关闭"
-    await UniMessage.text(f"已{proxy}代理。").finish()
-
-
 @remoteControl_fs.handle()
 async def remoteControl_fs_handler():
     date = currentDate()
@@ -443,7 +518,7 @@ async def remoteControl_ls_handler(
 @remoteControl_li.handle()
 async def remoteControl_li_handler(
         user_id: Match[str] = AlconnaMatch("user_id"),
-        limit: Match[str] = AlconnaMatch("limit")):
+        limit: Match[int] = AlconnaMatch("limit")):
     if not (user_id.available and limit.available):
         await UniMessage.text("参数错误。").finish()
     user_id = user_id.result

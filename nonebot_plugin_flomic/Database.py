@@ -17,23 +17,43 @@ class Database:
             user_freq: user_id, date, use_cnt
             user_limit: user_id, daily_limit
         """
-        logger.warning(database_file)
         self.database = sq.connect(str(database_file))
         self.cursor = self.database.cursor()
         try:
             command = """
-            create table if not exists album_info (
-                album_id    text,
-                title       text,
-                author      text,
-                tags        text,
-                page        int     default 0,
-                size        float   default 0.0,
-                query_cnt   int     default 0,
-                dl_cnt      int     default 0,
-                primary key (album_id)
-            );
-            """
+                      create table if not exists album_info
+                      (
+                          album_id
+                          text,
+                          title
+                          text,
+                          author
+                          text,
+                          tags
+                          text,
+                          page
+                          int
+                          default
+                          0,
+                          size
+                          float
+                          default
+                          0.0,
+                          query_cnt
+                          int
+                          default
+                          0,
+                          dl_cnt
+                          int
+                          default
+                          0,
+                          primary
+                          key
+                      (
+                          album_id
+                      )
+                          ); \
+                      """
             self.cursor.execute(command)
             self.database.commit()
         except sqlite3.Error as error:
@@ -41,13 +61,28 @@ class Database:
 
         try:
             command = """
-            create table if not exists restriction (
-                type    text,
-                info    text,
-                primary key (type, info),
-                constraint CHK_TYPE check (type = 'tag' or type = 'album_id')
-            );
-            """
+                      create table if not exists restriction
+                      (
+                          type
+                          text,
+                          info
+                          text,
+                          primary
+                          key
+                      (
+                          type,
+                          info
+                      ),
+                          constraint CHK_TYPE check
+                      (
+                          type =
+                          'tag'
+                          or
+                          type =
+                          'album_id'
+                      )
+                          ); \
+                      """
             self.cursor.execute(command)
             self.database.commit()
         except sqlite3.Error as error:
@@ -55,13 +90,24 @@ class Database:
 
         try:
             command = """
-            create table if not exists user_freq (
-                user_id     text,
-                date        text,
-                use_cnt     int     default 0,
-                primary key (user_id, date)
-            )
-            """
+                      create table if not exists user_freq
+                      (
+                          user_id
+                          text,
+                          date
+                          text,
+                          use_cnt
+                          int
+                          default
+                          0,
+                          primary
+                          key
+                      (
+                          user_id,
+                          date
+                      )
+                          ) \
+                      """
             self.cursor.execute(command)
             self.database.commit()
         except sqlite3.Error as error:
@@ -69,12 +115,19 @@ class Database:
 
         try:
             command = """
-            create table if not exists user_limit (
-                user_id     text,
-                daily_limit int,
-                primary key (user_id)
-            )
-            """
+                      create table if not exists user_limit
+                      (
+                          user_id
+                          text,
+                          daily_limit
+                          int,
+                          primary
+                          key
+                      (
+                          user_id
+                      )
+                          ) \
+                      """
             self.cursor.execute(command)
             self.database.commit()
         except sqlite3.Error as error:
@@ -82,13 +135,24 @@ class Database:
 
         try:
             command = """
-            create table if not exists user_xp (
-                user_id     text,
-                tag         text,
-                cnt         int default 0,
-                primary key (user_id, tag)
-            )
-            """
+                      create table if not exists user_xp
+                      (
+                          user_id
+                          text,
+                          tag
+                          text,
+                          cnt
+                          int
+                          default
+                          0,
+                          primary
+                          key
+                      (
+                          user_id,
+                          tag
+                      )
+                          ) \
+                      """
             self.cursor.execute(command)
             self.database.commit()
         except sqlite3.Error as error:
@@ -129,14 +193,14 @@ class Database:
     def updateAlbumQC(self, album_id: str) -> None:
         self.cursor.execute(
             "update album_info set query_cnt = query_cnt + 1 where album_id = ?",
-            (album_id, )
+            (album_id,)
         )
         self.database.commit()
 
     def updateAlbumDC(self, album_id: str) -> None:
         self.cursor.execute(
             "update album_info set dl_cnt = dl_cnt + 1 where album_id = ?",
-            (album_id, )
+            (album_id,)
         )
         self.database.commit()
 

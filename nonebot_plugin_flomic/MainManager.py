@@ -1,11 +1,12 @@
 import shutil
 import asyncio
 import jmcomic
+import os
 
 from enum import Enum
+from pathlib import Path
 from nonebot.log import logger
 
-from .Config import *
 from .utils import *
 from .Downloader import Downloader
 from .Client import Client
@@ -31,21 +32,27 @@ class FileType(Enum):
 
 
 class MainManager:
-    def __init__(self):
+    def __init__(self, database_file: Path, album_cache_dir: Path, save_cache_dir: Path,
+                 pdf_dir: Path, pics_dir: Path,
+                 default_options_str: str, firstImage_options_str: str):
+        self.database_file = database_file
+        self.album_cache_dir = album_cache_dir
+        self.save_cache_dir = save_cache_dir
+        self.downloader = Downloader(default_options_str)
+        self.client = Client()
+        self.firstImageDownloader = jmcomic.create_option_by_str(firstImage_options_str)
+        self.database = Database(self.database_file)
+        self.pdf_dir = pdf_dir
+        self.pics_dir = pics_dir
         self.pdf_cache_limit = 10 * 1024  # GB to MB
         self.pic_cache_limit = 1 * 1024
         self.download_queue = []
         self.upload_queue = []
         self.image_queue = []
         self.queue_limit = 5
-        self.downloader = Downloader(default_options_str)
-        self.client = Client()
-        self.firstImageDownloader = jmcomic.create_option_by_str(firstImage_options_str)
-        self.database = Database(database_file)
 
-    @classmethod
-    def getPathDir(cls, file_type: FileType) -> Path:
-        return pics_dir if file_type == FileType.JPG else pdf_dir
+    def getPathDir(self, file_type: FileType) -> Path:
+        return self.pics_dir if file_type == FileType.JPG else self.pdf_dir
 
     def getCacheMaxSize(self, file_type: FileType) -> int:
         return self.pic_cache_limit if file_type == FileType.JPG else self.pdf_cache_limit
@@ -91,7 +98,7 @@ class MainManager:
 
     def cleanPics(self) -> None:
         if len(self.download_queue) == 0 and len(self.image_queue) == 0:
-            shutil.rmtree(album_cache_dir)
+            shutil.rmtree(self.album_cache_dir)
 
     def isValidAlbumId(self, album_id: str) -> bool:
         return self.client.isValidAlbumId(album_id)
@@ -232,14 +239,12 @@ class MainManager:
             jmcomic.JmModuleConfig.CLASS_DOWNLOADER = None
 
             target = None
-            album_dir = os.path.join(album_cache_dir, album_id)
+            album_dir = os.path.join(self.album_cache_dir, album_id)
             for file in os.listdir(album_dir):
                 target = os.path.join(album_dir, file)
                 break
 
             if target is not None:
-                logger.warning(target)
-                logger.warning(str(self.getFilePath(album_id, FileType.JPG)))
                 shutil.move(target, str(self.getFilePath(album_id, FileType.JPG)))
 
             self.image_queue.remove(album_id)
@@ -247,6 +252,3 @@ class MainManager:
             self.cleanCache(FileType.JPG)
 
         return info
-
-
-mm = MainManager()
