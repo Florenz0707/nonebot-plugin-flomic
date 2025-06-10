@@ -1,0 +1,29 @@
+[project]
+name = "nonebot-plugin-flomic"
+version = "0.1.0"
+description = "nonebot-plugin-flomic"
+readme = "README.md"
+requires-python = ">=3.9, <4.0"
+
+[tool.nonebot]
+adapters = [
+    { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" }
+]
+plugins = []
+plugin_dirs = ["nonebot_plugin_flomic/plugins"]
+builtin_plugins = []
+
+[tool.poetry]
+name = "nonebot-plugin-flomic"
+version = "0.1.0"
+description = ""
+authors = ["Florenz <florenz@tju.edu.cn>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
