@@ -1,7 +1,7 @@
 [project]
 name = "nonebot-plugin-flomic"
 version = "0.1.0"
-description = "nonebot-plugin-flomic"
+description = "多功能的 jmcomic 使用插件"
 readme = "README.md"
 requires-python = ">=3.9, <=3.11"
 
@@ -9,19 +9,25 @@ requires-python = ">=3.9, <=3.11"
 adapters = [
     { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" }
 ]
-plugins = ["nonebot_plugin_flomic"]
+plugins = ["nonebot_plugin_alconna", "nonebot_plugin_uninfo", "nonebot_plugin_localstore", "nonebot_plugin_flomic"]
 plugin_dirs = []
 builtin_plugins = []
 
 [tool.poetry]
 name = "nonebot-plugin-flomic"
 version = "0.1.0"
-description = ""
+description = "多功能的 jmcomic 使用插件"
 authors = ["Florenz <florenz@tju.edu.cn>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.9"
+nonebot2 = ">=2.4.2"
+nonebot-plugin-alconna = ">=0.58.3"
+nonebot-plugin-uninfo = ">=0.8.0"
+nonebot-plugin-localstore = ">=0.7.4"
+jmcomic = ">=2.6.0"
+img2pdf = ">=0.6.1"
 
 
 [build-system]

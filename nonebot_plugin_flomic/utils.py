@@ -1,4 +1,22 @@
 from datetime import datetime
+from enum import Enum
+
+
+class Status(Enum):
+    GOOD = 1
+    BAD = 2
+    RUDE = 3
+    NOTFOUND = 4
+    RESTRICT = 5
+    BUSY = 6
+    CACHED = 7
+    UPLOADING = 8
+    DOWNLOADING = 9
+
+
+class FileType(Enum):
+    PDF = 0
+    JPG = 1
 
 
 def Byte2MB(size: int) -> float:

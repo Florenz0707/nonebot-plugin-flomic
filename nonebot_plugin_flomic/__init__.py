@@ -1,22 +1,17 @@
 # ------------------------ import ------------------------
 # import packages from python
-import jmcomic
-import os
 from random import *
-from pathlib import Path
 
 # import packages from nonebot or other plugins
-from nonebot import require
 import nonebot.adapters.onebot.v11.exception
+from nonebot.plugin import inherit_supported_adapters
 from nonebot.permission import Permission, SUPERUSER, SuperUser, Event
 from nonebot.adapters.onebot.v11 import Bot
-from nonebot.log import logger
 
 # import fellow modules
-from .Config import jm_config
 from .utils import *
 from .GroupFileManager import GroupFileManager
-from .MainManager import FileType, Status, MainManager
+from .MainManager import *
 
 require("nonebot_plugin_alconna")
 from nonebot_plugin_alconna import *
@@ -24,84 +19,28 @@ from nonebot_plugin_alconna import *
 require("nonebot_plugin_uninfo")
 from nonebot_plugin_uninfo import *
 
-require("nonebot_plugin_localstore")
-import nonebot_plugin_localstore as localstore
-
 # ------------------------ import ------------------------
 
-data_dir: Path = localstore.get_plugin_data_dir()
-database_file: Path = localstore.get_plugin_data_file("jmcomic.db")
-cache_dir: Path = localstore.get_plugin_cache_dir()
-album_cache_dir: Path = Path.joinpath(cache_dir, "album_cache")
-save_cache_dir: Path = Path.joinpath(cache_dir, "save_cache")
-pdf_dir: Path = Path.joinpath(save_cache_dir, "pdf")
-pics_dir: Path = Path.joinpath(save_cache_dir, "pics")
-
-config_dir_list = [album_cache_dir, save_cache_dir, pdf_dir, pics_dir]
-
-for config_dir in config_dir_list:
-    if not os.path.exists(config_dir):
-        os.mkdir(config_dir)
-
-default_options_str = f"""
-client:
-  impl: api
-  retry_times: 10
-dir_rule:
-  base_dir: {album_cache_dir}
-  rule: Bd_Aid_Pindex
-download:
-  threading:
-    image: {jm_config.threading_image}
-    photo: {jm_config.threading_photo}
-log: true
-plugins:
-  after_init:
-  - plugin: log_topic_filter
-    kwargs:
-      whitelist:
-      - album.before
-      - photo.before
-  - plugin: login
-    kwargs:
-      username: {jm_config.jm_username}
-      password: {jm_config.jm_password}
-  after_photo:
-  - plugin: img2pdf
-    kwargs:
-      filename_rule: Aid
-      pdf_dir: {pdf_dir}
-"""
-
-firstImage_options_str = f"""
-client:
-  impl: api
-  retry_times: 5
-dir_rule:
-  base_dir: {album_cache_dir}
-  rule: Bd_Pid
-download:
-  image:
-    suffix: .jpg
-  threading:
-    image: {jm_config.threading_image}
-    photo: {jm_config.threading_photo}
-log: true
-plugins:
-  after_init:
-  - plugin: log_topic_filter
-    kwargs:
-      whitelist:
-      - album.before
-      - photo.before
-  - plugin: login
-    kwargs:
-      username: {jm_config.jm_username}
-      password: {jm_config.jm_password}
-"""
-
-mm = MainManager(database_file, album_cache_dir, save_cache_dir, pdf_dir, pics_dir,
-                 default_options_str, firstImage_options_str)
+__plugin_meta__ = PluginMetadata(
+    name="nonebot-plugin-flomic",
+    description="多功能的 jmcomic 使用插件",
+    usage="""
+    ==============用户使用==============
+    1> .jm.d <id> 下载车牌为id的本子
+    2> .jm.q <id> [-i] 查询车牌为id的本子信息，使用-i参数取消附带首图
+    3> .jm.r [-q] 随机生成可用的车牌号，使用-q参数可以直接查询
+    4> .jm.xp [-u QQ] [-l 长度] 查询指定用户的XP，默认查询自己，默认长度为5，最大为20
+    ?> .jm.m <cache/f_s/(d/u)_(s/c)/(r/l)_(s/i/d)>"
+    """,
+    homepage="https://github.com/Florenz0707/nonebot-plugin-flomic",
+    type="application",
+    supported_adapters=inherit_supported_adapters(
+        "nonebot_plugin_alconna", "nonebot_plugin_uninfo"
+    ),
+    extra={
+        "author": "florenz0707",
+    }
+)
 
 help_menu = on_alconna(
     "jm.help",

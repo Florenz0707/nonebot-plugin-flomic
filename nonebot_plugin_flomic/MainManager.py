@@ -1,12 +1,10 @@
 import shutil
 import asyncio
 import jmcomic
-import os
 
-from enum import Enum
-from pathlib import Path
 from nonebot.log import logger
 
+from .Config import *
 from .utils import *
 from .Downloader import Downloader
 from .Client import Client
@@ -14,27 +12,8 @@ from .Database import Database
 from .Filter import FirstImageFilter
 
 
-class Status(Enum):
-    GOOD = 1
-    BAD = 2
-    RUDE = 3
-    NOTFOUND = 4
-    RESTRICT = 5
-    BUSY = 6
-    CACHED = 7
-    UPLOADING = 8
-    DOWNLOADING = 9
-
-
-class FileType(Enum):
-    PDF = 0
-    JPG = 1
-
-
 class MainManager:
-    def __init__(self, database_file: Path, album_cache_dir: Path, save_cache_dir: Path,
-                 pdf_dir: Path, pics_dir: Path,
-                 default_options_str: str, firstImage_options_str: str):
+    def __init__(self):
         self.database_file = database_file
         self.album_cache_dir = album_cache_dir
         self.save_cache_dir = save_cache_dir
@@ -44,8 +23,8 @@ class MainManager:
         self.database = Database(self.database_file)
         self.pdf_dir = pdf_dir
         self.pics_dir = pics_dir
-        self.pdf_cache_limit = 10 * 1024  # GB to MB
-        self.pic_cache_limit = 1 * 1024
+        self.pdf_cache_limit = jm_config.pdf_cache_size * 1024  # GB to MB
+        self.pic_cache_limit = jm_config.pic_cache_size * 1024
         self.download_queue = []
         self.upload_queue = []
         self.image_queue = []
@@ -252,3 +231,6 @@ class MainManager:
             self.cleanCache(FileType.JPG)
 
         return info
+
+
+mm = MainManager()
