@@ -1,23 +1,24 @@
 [project]
 name = "nonebot-plugin-flomic"
 version = "0.1.0"
-description = "多功能的 jmcomic 使用插件"
+description = "Nonebot plugin for using jmcomic crawler with multiple functions."
 readme = "README.md"
-requires-python = ">=3.9, <=3.11"
+requires-python = ">=3.9, <4.0"
 
 [tool.nonebot]
 adapters = [
     { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" }
 ]
-plugins = ["nonebot_plugin_alconna", "nonebot_plugin_uninfo", "nonebot_plugin_localstore", "nonebot_plugin_flomic"]
-plugin_dirs = []
+plugins = ["nonebot_plugin_alconna", "nonebot_plugin_uninfo", "nonebot_plugin_localstore"]
+plugin_dirs = ["nonebot_plugin_flomic"]
 builtin_plugins = []
 
 [tool.poetry]
 name = "nonebot-plugin-flomic"
 version = "0.1.0"
-description = "多功能的 jmcomic 使用插件"
-authors = ["Florenz <florenz@tju.edu.cn>"]
+description = "Nonebot plugin for using jmcomic crawler with multiple functions."
+authors = ["florenz <florenz@tju.edu.cn>"]
+license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]

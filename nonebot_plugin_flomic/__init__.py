@@ -23,7 +23,7 @@ from nonebot_plugin_uninfo import *
 
 __plugin_meta__ = PluginMetadata(
     name="nonebot-plugin-flomic",
-    description="多功能的 jmcomic 使用插件",
+    description="Nonebot plugin for using jmcomic crawler with multiple functions.",
     usage="""
     ==============用户使用==============
     1> .jm.d <id> 下载车牌为id的本子
