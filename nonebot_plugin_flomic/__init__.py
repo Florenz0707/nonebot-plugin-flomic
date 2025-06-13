@@ -3,7 +3,6 @@
 from random import *
 
 # import packages from nonebot or other plugins
-from nonebot.plugin import inherit_supported_adapters
 from nonebot.permission import Permission, SUPERUSER, SuperUser, Event
 from nonebot.adapters.onebot.v11 import Bot
 
@@ -33,9 +32,8 @@ __plugin_meta__ = PluginMetadata(
     """,
     homepage="https://github.com/Florenz0707/nonebot-plugin-flomic",
     type="application",
-    supported_adapters=inherit_supported_adapters(
-        "nonebot_plugin_alconna", "nonebot_plugin_uninfo"
-    ),
+    config=Config,
+    supported_adapters={"~onebot.v11"},
     extra={
         "author": "florenz0707",
     }

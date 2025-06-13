@@ -10,16 +10,9 @@
 
 _✨ 多功能的 jmcomic 使用插件 ✨_
 
-
-<a href="./LICENSE">
-    <img src="https://img.shields.io/github/license/owner/nonebot-plugin-template.svg" alt="license">
-</a>
-<a href="https://pypi.python.org/pypi/nonebot-plugin-template">
-    <img src="https://img.shields.io/pypi/v/nonebot-plugin-template.svg" alt="pypi">
-</a>
-<img src="https://img.shields.io/badge/python-3.9+-blue.svg" alt="python">
-
 </div>
+
+---
 
 ## 📖 介绍
 
@@ -121,10 +114,10 @@ _✨ 多功能的 jmcomic 使用插件 ✨_
 | jm.m r_d <tag/album_id> <内容> | SUPERUSER |  否  | 所有 |     删除黑名单。若为标签请指定为tag，若为本子号请指定为album_id。      |
 
 ### 效果图
-<img src="./exhibit.png" alt="如果有效果图的话">
-<img src="./intro.png" alt="如果有效果图的话">
+<img src="./resource/exhibit.png" alt="如果有效果图的话">
+<img src="./resource/intro.png" alt="如果有效果图的话">
 
 ### 其他
 1. 如果显示“发送失败了”，可能是消息被和谐了，试着先从私聊获取再转发到群聊。
 2. 强制要求下载前必须查询。
-3. 版本号：0.1.2
+3. 版本号：0.1.3

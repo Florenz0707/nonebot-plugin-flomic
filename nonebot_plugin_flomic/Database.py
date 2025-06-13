@@ -24,35 +24,35 @@ class Database:
                       create table if not exists album_info
                       (
                           album_id
-                          text,
+                              text,
                           title
-                          text,
+                              text,
                           author
-                          text,
+                              text,
                           tags
-                          text,
+                              text,
                           page
-                          int
-                          default
-                          0,
+                              int
+                              default
+                                  0,
                           size
-                          float
-                          default
-                          0.0,
+                              float
+                              default
+                                  0.0,
                           query_cnt
-                          int
-                          default
-                          0,
+                              int
+                              default
+                                  0,
                           dl_cnt
-                          int
-                          default
-                          0,
+                              int
+                              default
+                                  0,
                           primary
-                          key
-                      (
-                          album_id
-                      )
-                          ); \
+                              key
+                              (
+                               album_id
+                                  )
+                      ); \
                       """
             self.cursor.execute(command)
             self.database.commit()
@@ -64,24 +64,24 @@ class Database:
                       create table if not exists restriction
                       (
                           type
-                          text,
+                              text,
                           info
-                          text,
+                              text,
                           primary
-                          key
-                      (
-                          type,
-                          info
-                      ),
+                              key
+                              (
+                               type,
+                               info
+                                  ),
                           constraint CHK_TYPE check
-                      (
-                          type =
-                          'tag'
-                          or
-                          type =
-                          'album_id'
-                      )
-                          ); \
+                              (
+                              type =
+                              'tag'
+                                  or
+                              type =
+                              'album_id'
+                              )
+                      ); \
                       """
             self.cursor.execute(command)
             self.database.commit()
@@ -93,20 +93,20 @@ class Database:
                       create table if not exists user_freq
                       (
                           user_id
-                          text,
+                              text,
                           date
-                          text,
+                              text,
                           use_cnt
-                          int
-                          default
-                          0,
+                              int
+                              default
+                                  0,
                           primary
-                          key
-                      (
-                          user_id,
-                          date
-                      )
-                          ) \
+                              key
+                              (
+                               user_id,
+                               date
+                                  )
+                      ) \
                       """
             self.cursor.execute(command)
             self.database.commit()
@@ -118,15 +118,15 @@ class Database:
                       create table if not exists user_limit
                       (
                           user_id
-                          text,
+                              text,
                           daily_limit
-                          int,
+                              int,
                           primary
-                          key
-                      (
-                          user_id
-                      )
-                          ) \
+                              key
+                              (
+                               user_id
+                                  )
+                      ) \
                       """
             self.cursor.execute(command)
             self.database.commit()
@@ -137,21 +137,11 @@ class Database:
             command = """
                       create table if not exists user_xp
                       (
-                          user_id
-                          text,
-                          tag
-                          text,
-                          cnt
-                          int
-                          default
-                          0,
-                          primary
-                          key
-                      (
-                          user_id,
-                          tag
-                      )
-                          ) \
+                          user_id text,
+                          tag     text,
+                          cnt     int default 0,
+                          primary key (user_id, tag)
+                      ) \
                       """
             self.cursor.execute(command)
             self.database.commit()
