@@ -3,7 +3,6 @@
 from random import *
 
 # import packages from nonebot or other plugins
-import nonebot.adapters.onebot.v11.exception
 from nonebot.plugin import inherit_supported_adapters
 from nonebot.permission import Permission, SUPERUSER, SuperUser, Event
 from nonebot.adapters.onebot.v11 import Bot
