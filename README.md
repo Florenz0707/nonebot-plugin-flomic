@@ -82,14 +82,14 @@ _✨ 多功能的 jmcomic 使用插件 ✨_
 
 在 nonebot2 项目的`.env`文件中添加下表中的必填配置
 
-|       配置项       | 必填 | 默认值 |       说明       |
-|:---------------:|:--:|:---:|:--------------:|
-|   jm_username   | 否  |  无  |    JM登录用户名     |
-|   jm_password   | 否  |  无  |     JM登录密码     |
-| threading_image | 否  | 20  |    同时请求的图片数    |
-| threading_photo | 否  | 15  |    同时请求的章节数    |
-| pdf_cache_size  | 否  |  1  | PDF文件的缓存大小（GB） |
-| pic_cache_size  | 否  | 0.5 | 本子首图的缓存大小（GB）  |
+|       配置项       |  类型   | 必填 | 默认值 |       说明       |
+|:---------------:|:-----:|:--:|:---:|:--------------:|
+|   jm_username   |  str  | 否  |  无  |    JM登录用户名     |
+|   jm_password   |  str  | 否  |  无  |     JM登录密码     |
+| threading_image |  int  | 否  | 20  |    同时请求的图片数    |
+| threading_photo |  int  | 否  | 15  |    同时请求的章节数    |
+| pdf_cache_size  | float | 否  |  1  | PDF文件的缓存大小（GB） |
+| pic_cache_size  | float | 否  | 0.5 | 本子首图的缓存大小（GB）  |
 
 ## 🎉 使用
 
@@ -114,10 +114,12 @@ _✨ 多功能的 jmcomic 使用插件 ✨_
 | jm.m r_d <tag/album_id> <内容> | SUPERUSER |  否  | 所有 |     删除黑名单。若为标签请指定为tag，若为本子号请指定为album_id。      |
 
 ### 效果图
-<img src="./resource/exhibit.png" alt="如果有效果图的话">
+
+<img src="./resource/commands.png" alt="如果有效果图的话">
 <img src="./resource/intro.png" alt="如果有效果图的话">
 
 ### 其他
-1. 如果显示“发送失败了”，可能是消息被和谐了，试着先从私聊获取再转发到群聊。
+
+1. 如果显示“发送失败了”，可能是消息被和谐了（多半是因为图片），试着从私聊获取再转发到群聊。
 2. 强制要求下载前必须查询。
-3. 版本号：0.1.3
+3. 版本号：0.1.4

@@ -23,8 +23,8 @@ class MainManager:
         self.database = Database(self.database_file)
         self.pdf_dir = pdf_dir
         self.pics_dir = pics_dir
-        self.pdf_cache_limit = jm_config.pdf_cache_size * 1024  # GB to MB
-        self.pic_cache_limit = jm_config.pic_cache_size * 1024
+        self.pdf_cache_limit = int(jm_config.pdf_cache_size * 1024)  # GB to MB
+        self.pic_cache_limit = int(jm_config.pic_cache_size * 1024)
         self.download_queue = []
         self.upload_queue = []
         self.image_queue = []

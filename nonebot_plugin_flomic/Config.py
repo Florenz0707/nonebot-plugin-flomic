@@ -26,7 +26,7 @@ class Config(BaseModel):
     jm_password: str = ""
     threading_image: int = 20
     threading_photo: int = 15
-    pdf_cache_size: int = 1
+    pdf_cache_size: float = 1.0
     pic_cache_size: float = 0.5
 
 
