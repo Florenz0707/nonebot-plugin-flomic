@@ -10,10 +10,10 @@ import nonebot_plugin_localstore as localstore
 data_dir: Path = localstore.get_plugin_data_dir()
 database_file: Path = localstore.get_plugin_data_file("jmcomic.db")
 cache_dir: Path = localstore.get_plugin_cache_dir()
-album_cache_dir: Path = Path.joinpath(cache_dir, "album_cache")
-save_cache_dir: Path = Path.joinpath(cache_dir, "save_cache")
-pdf_dir: Path = Path.joinpath(save_cache_dir, "pdf")
-pics_dir: Path = Path.joinpath(save_cache_dir, "pics")
+album_cache_dir: Path = cache_dir.joinpath("album_cache")
+save_cache_dir: Path = cache_dir.joinpath("save_cache")
+pdf_dir: Path = save_cache_dir.joinpath("pdf")
+pics_dir: Path = save_cache_dir.joinpath("pics")
 
 config_dir_list = [album_cache_dir, save_cache_dir, pdf_dir, pics_dir]
 

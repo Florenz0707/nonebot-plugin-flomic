@@ -1,15 +1,19 @@
 # ------------------------ import ------------------------
 # import packages from python
-from random import *
+import asyncio
+import random
+import jmcomic
 
 # import packages from nonebot or other plugins
 from nonebot.permission import Permission, SUPERUSER, SuperUser, Event
 from nonebot.adapters.onebot.v11 import Bot
+from nonebot.log import logger
+from nonebot import require
 
 # import fellow modules
 from .utils import *
 from .GroupFileManager import GroupFileManager
-from .MainManager import *
+from .MainManager import mm
 
 require("nonebot_plugin_alconna")
 from nonebot_plugin_alconna import *
@@ -296,13 +300,13 @@ async def randomId_handler(
     retry = 0
     left_bound = 100000
     right_bound = 1200000
-    album_id = randint(left_bound, right_bound)
+    album_id = random.randint(left_bound, right_bound)
     while not mm.isValidAlbumId(str(album_id)):
         album_id += 13
         retry += 1
         if retry > 9:
             retry = 0
-            album_id = randint(left_bound, right_bound)
+            album_id = random.randint(left_bound, right_bound)
 
     album_id = str(album_id)
     if query.available and query.result == "-q":

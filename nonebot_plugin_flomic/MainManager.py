@@ -1,11 +1,14 @@
 import shutil
 import asyncio
 import jmcomic
+import os
 
 from nonebot.log import logger
+from pathlib import Path
 
-from .Config import *
 from .utils import *
+from .Config import (jm_config, default_options_str, firstImage_options_str,
+                     database_file, album_cache_dir, save_cache_dir, pdf_dir, pics_dir)
 from .Downloader import Downloader
 from .Client import Client
 from .Database import Database
