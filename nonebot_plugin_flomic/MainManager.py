@@ -41,14 +41,14 @@ class MainManager:
 
     def getFilePath(self, album_id: str, file_type: FileType) -> Path:
         suffix = "jpg" if file_type == FileType.JPG else "pdf"
-        return Path.joinpath(self.getPathDir(file_type), f"{album_id}.{suffix}")
+        return self.getPathDir(file_type).joinpath(f"{album_id}.{suffix}")
 
     def getFileSize(self, album_id: str, file_type: FileType) -> float:
         file_path: Path = self.getFilePath(album_id, file_type)
         return Byte2MB(file_path.stat().st_size) if file_path.exists() else 0
 
     def getCacheList(self, file_type: FileType) -> list[Path]:
-        ret = [Path.joinpath(self.getPathDir(file_type), path) for path in os.listdir(self.getPathDir(file_type))]
+        ret = [self.getPathDir(file_type).joinpath(path) for path in os.listdir(self.getPathDir(file_type))]
         return ret
 
     def getCacheCnt(self, file_type: FileType) -> int:
