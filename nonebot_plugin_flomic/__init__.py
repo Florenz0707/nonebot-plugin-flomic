@@ -1,19 +1,18 @@
 # ------------------------ import ------------------------
 # import packages from python
-import asyncio
 import random
-import jmcomic
 
-# import packages from nonebot or other plugins
-from nonebot.permission import Permission, SUPERUSER, SuperUser, Event
+import jmcomic
+from nonebot import require
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot.log import logger
-from nonebot import require
+# import packages from nonebot or other plugins
+from nonebot.permission import Permission, SUPERUSER, SuperUser, Event
 
-# import fellow modules
-from .utils import *
 from .GroupFileManager import GroupFileManager
 from .MainManager import mm
+# import fellow modules
+from .utils import *
 
 require("nonebot_plugin_alconna")
 from nonebot_plugin_alconna import *
@@ -199,8 +198,6 @@ async def download_handler(
     status = mm.add2queue(album_id, forced)
     if status == Status.BAD:
         await UniMessage.text("出现了奇怪的错误！").finish()
-    if status == Status.NOTFOUND:
-        await UniMessage.text(f"[{album_id}]找不到该编号！你再看看呢").finish()
     if status == Status.BUSY:
         await UniMessage.text("当前排队的人太多啦！过会再来吧~").finish()
     if status == Status.DOWNLOADING:

@@ -97,8 +97,6 @@ class MainManager:
             return Status.BUSY
         if self.isUploading(album_id):
             return Status.UPLOADING
-        if not self.isValidAlbumId(album_id):
-            return Status.NOTFOUND
 
         self.database.updateAlbumDC(album_id)
         if self.isFileCached(album_id, FileType.PDF):
