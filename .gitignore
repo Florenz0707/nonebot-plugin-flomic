@@ -141,4 +141,3 @@ dmypy.json
 
 data/
 .idea/
-.pre-commit-config.yaml

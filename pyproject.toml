@@ -2,8 +2,6 @@
 name = "nonebot-plugin-flomic"
 version = "0.1.7"
 description = "Nonebot plugin for using jmcomic crawler with multiple functions."
-authors = ["florenz <florenz@tju.edu.cn>"]
-license = "MIT"
 readme = "README.md"
 requires-python = ">=3.9, <4.0"
 
@@ -14,6 +12,14 @@ adapters = [
 plugins = ["nonebot_plugin_alconna", "nonebot_plugin_uninfo", "nonebot_plugin_localstore", "nonebot_plugin_flomic"]
 plugin_dirs = []
 builtin_plugins = []
+
+[tool.poetry]
+name = "nonebot-plugin-flomic"
+version = "0.1.7"
+description = "Nonebot plugin for using jmcomic crawler with multiple functions."
+authors = ["florenz <florenz@tju.edu.cn>"]
+license = "MIT"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
