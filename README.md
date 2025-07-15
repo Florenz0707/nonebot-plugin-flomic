@@ -123,4 +123,4 @@ _✨ 多功能的 jmcomic 使用插件 ✨_
 1. 鸣谢项目：[JMComic-Crawler-Python](https://github.com/hect0x7/JMComic-Crawler-Python)。
 2. 如果显示“发送失败了”，可能是消息被和谐了（多半是因为图片），试着从私聊获取再转发到群聊。
 3. 强制要求下载前必须查询。
-4. 版本号：0.1.8
+4. 版本号：0.1.9

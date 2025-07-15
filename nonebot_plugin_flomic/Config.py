@@ -53,12 +53,12 @@ download:
 log: true
 plugins:
   after_init:
-""" + login_config + """
   - plugin: log_topic_filter
     kwargs:
       whitelist:
       - album.before
       - photo.before
+""" + login_config + f"""
   after_photo:
   - plugin: img2pdf
     kwargs:
@@ -87,8 +87,4 @@ plugins:
       whitelist:
       - album.before
       - photo.before
-  - plugin: login
-    kwargs:
-      username: {jm_config.jm_username}
-      password: {jm_config.jm_password}
-"""
+""" + login_config
