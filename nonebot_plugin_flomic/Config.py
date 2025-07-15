@@ -22,8 +22,8 @@ for config_dir in config_dir_list:
         os.mkdir(config_dir)
 
 class Config(BaseModel):
-    jm_username: str = ""
-    jm_password: str = ""
+    jm_username: str = None
+    jm_password: str = None
     threading_image: int = 20
     threading_photo: int = 15
     pdf_cache_size: float = 1.0
@@ -31,6 +31,13 @@ class Config(BaseModel):
 
 
 jm_config = get_plugin_config(Config)
+
+login_config = "" if jm_config.jm_username is None or jm_config.jm_password is None else f"""
+  - plugin: login
+    kwargs:
+      username: {jm_config.jm_username}
+      password: {jm_config.jm_password}
+"""
 
 default_options_str = f"""
 client:
@@ -46,15 +53,12 @@ download:
 log: true
 plugins:
   after_init:
+""" + login_config + """
   - plugin: log_topic_filter
     kwargs:
       whitelist:
       - album.before
       - photo.before
-  - plugin: login
-    kwargs:
-      username: {jm_config.jm_username}
-      password: {jm_config.jm_password}
   after_photo:
   - plugin: img2pdf
     kwargs:

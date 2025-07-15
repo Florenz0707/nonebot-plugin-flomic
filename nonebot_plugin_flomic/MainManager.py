@@ -215,7 +215,8 @@ class MainManager:
         if with_image and not self.isFileCached(album_id, FileType.JPG):
             self.image_queue.append(album_id)
             jmcomic.JmModuleConfig.CLASS_DOWNLOADER = FirstImageFilter
-            self.firstImageDownloader.download_photo(album_id)
+            await asyncio.to_thread(self.firstImageDownloader.download_photo, album_id)
+            # self.firstImageDownloader.download_photo(album_id)
             jmcomic.JmModuleConfig.CLASS_DOWNLOADER = None
 
             target = None
