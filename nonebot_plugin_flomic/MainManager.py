@@ -75,6 +75,12 @@ class MainManager:
             logger.warning(f"Clean cache file: {str(file_path)}")
             file_list = file_list[1:]
 
+    def cleanSpecFile(self, album_id: str, file_type: FileType) -> bool:
+        if not self.isFileCached(album_id, file_type):
+            return False
+        os.remove(str(self.getFilePath(album_id, file_type)))
+        return not self.isFileCached(album_id, file_type)
+
     def isFileCached(self, album_id: str, file_type: FileType) -> bool:
         return self.getFilePath(album_id, file_type).exists()
 
@@ -106,6 +112,7 @@ class MainManager:
         return Status.GOOD
 
     async def download(self, album_id: str) -> None:
+        jmcomic.JmModuleConfig.CLASS_DOWNLOADER = None
         await asyncio.to_thread(self.downloader.download, album_id)
         self.database.setAlbumSize(album_id, self.getFileSize(album_id, FileType.PDF))
         self.download_queue.remove(album_id)

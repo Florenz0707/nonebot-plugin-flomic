@@ -1,5 +1,6 @@
 # ------------------------ import ------------------------
 # import packages from python
+import os
 import random
 
 import jmcomic
@@ -87,7 +88,14 @@ queryXP = on_alconna(
 remoteControl = on_alconna(
     Alconna(
         "jm.m",
-        Subcommand("cache"),
+        Subcommand(
+            "c_s",
+            Args["verbose?", str]
+        ),
+        Subcommand(
+            "c_d",
+            Args["album_id?", str]
+        ),
         Subcommand("f_s"),
         Subcommand("d_s"),
         Subcommand("d_c"),
@@ -97,12 +105,12 @@ remoteControl = on_alconna(
         Subcommand(
             "r_i",
             Args["type?", str],
-            Args["info", str]
+            Args["info?", str]
         ),
         Subcommand(
             "r_d",
             Args["type?", str],
-            Args["info", str]
+            Args["info?", str]
         ),
         Subcommand(
             "l_s",
@@ -111,7 +119,7 @@ remoteControl = on_alconna(
         Subcommand(
             "l_i",
             Args["user_id?", str],
-            Args["limit", int]
+            Args["limit?", int]
         ),
         Subcommand(
             "l_d",
@@ -122,7 +130,8 @@ remoteControl = on_alconna(
     permission=SUPERUSER
 )
 
-remoteControl_cache = remoteControl.dispatch("cache")
+remoteControl_cs = remoteControl.dispatch("c_s")
+remoteControl_cd = remoteControl.dispatch("c_d")
 remoteControl_fs = remoteControl.dispatch("f_s")
 remoteControl_ds = remoteControl.dispatch("d_s")
 remoteControl_dc = remoteControl.dispatch("d_c")
@@ -134,23 +143,6 @@ remoteControl_rd = remoteControl.dispatch("r_d")
 remoteControl_ls = remoteControl.dispatch("l_s")
 remoteControl_li = remoteControl.dispatch("l_i")
 remoteControl_ld = remoteControl.dispatch("l_d")
-
-test = on_alconna(
-    Alconna(
-        "test",
-        Args["force", str]
-    ),
-    use_cmd_start=True,
-    permission=SUPERUSER
-)
-
-
-@test.handle()
-async def test_handler(
-        arg: Match[str] = AlconnaMatch("force")):
-    if arg.available:
-        arg = arg.result
-        await UniMessage.text(arg).finish()
 
 
 @help_menu.handle()
@@ -333,12 +325,32 @@ async def queryXP_handler(
     await UniMessage.text(message).finish()
 
 
-@remoteControl_cache.handle()
-async def remoteControl_cache_handler():
-    message = f"当前共有{mm.getCacheCnt(FileType.PDF)}个PDF文件，共计占用空间{mm.getCacheSize(FileType.PDF):.2f}MB。\n" \
-              f"当前共有{mm.getCacheCnt(FileType.JPG)}个JPG文件，共计占用空间{mm.getCacheSize(FileType.JPG):.2f}MB。"
-    await UniMessage.text(message).finish()
+@remoteControl_cs.handle()
+async def remoteControl_cs_handler(
+        verbose: Match[str] = AlconnaMatch("verbose")):
+    message = UniMessage.text(
+        f"""当前共有{mm.getCacheCnt(FileType.PDF)}个PDF文件，共计占用空间{mm.getCacheSize(FileType.PDF):.2f}MB。
+当前共有{mm.getCacheCnt(FileType.JPG)}个JPG文件，共计占用空间{mm.getCacheSize(FileType.JPG):.2f}MB。""")
+    if verbose.available and verbose.result == "-v":
+        file_list = sorted(mm.getCacheList(FileType.PDF), key=lambda x: os.path.getctime(str(x)))
+        name_list = [str(file).split("\\")[-1] for file in file_list]
+        size_list = [Byte2MB(os.path.getsize(file)) for file in file_list]
+        message = message.text("\n\n以下是详细信息：（从旧到新）")
+        for index in range(len(file_list)):
+            message = message.text(f"\n{index + 1}. {name_list[index]}({size_list[index]:.2f}MB)")
+    await message.finish()
 
+@remoteControl_cd.handle()
+async def remoteControl_cd_handler(
+        album_id: Match[str] = AlconnaMatch("album_id")):
+    if not album_id.available:
+        pass
+    album_id = album_id.result
+    ret = mm.cleanSpecFile(album_id, FileType.PDF)
+    if ret:
+        await UniMessage.text("操作成功。").finish()
+    else:
+        await UniMessage.text("操作失败。").finish()
 
 @remoteControl_fs.handle()
 async def remoteControl_fs_handler():
